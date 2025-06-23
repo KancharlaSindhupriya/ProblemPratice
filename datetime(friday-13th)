@@ -1,0 +1,4 @@
+def friday_13th(year,month):
+  return datetime.date(year,month,13).weekday()==4;
+print(friday_13th(2025,7))
+print(friday_13th(2025,6))

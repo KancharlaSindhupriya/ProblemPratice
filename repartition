@@ -1,0 +1,18 @@
+from pyspark.sql import SparkSession
+
+
+spark = SparkSession.builder \
+    .appName("Repartition Example") \
+    .getOrCreate()
+df = spark.createDataFrame(data, ["country", "sales"])
+
+data = [("India", 100),("USA", 200),("India", 150),("UK", 50),("USA", 300),
+    ("UK", 70)
+]
+
+df_repartitioned = df.repartition(4)
+
+
+df_country = df.repartition(3, "country")
+
+print("Repartitioned by country:", df_country.rdd.getNumPartitions())

@@ -1,0 +1,15 @@
+class UserNotFoundError(Exception):
+    pass
+
+users = ["pravalika", "asha", "deekshitha"]
+
+username = input("Enter username: ")
+try:
+  if username not in users:
+      raise UserNotFoundError("User not found")
+  else:
+      print(f"Welcome, {username}")
+except UserNotFoundError as e:
+  print(e)
+finally:
+  print("custom exception")

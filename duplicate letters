@@ -1,0 +1,10 @@
+
+def duplicate_letters(sentence):
+    strings = sentence.split()
+
+    return any(
+        len(set(string)) < len(string)
+        for string in strings
+    )
+print(duplicate_letters("I Love Travelling"))  
+print(duplicate_letters("Iam Doing Python")) 

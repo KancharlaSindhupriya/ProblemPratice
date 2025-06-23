@@ -1,0 +1,6 @@
+for chickens in range(36): 
+    rabbits = 35 - chickens 
+    legs = 2 * chickens + 4 * rabbits
+    if legs == 94:
+        print(f"Chickens: {chickens}, Rabbits: {rabbits}")
+        break

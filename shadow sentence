@@ -1,0 +1,12 @@
+def shadow_sentence(s1, s2):
+    sentence1 = s1.split()
+    sentence2 = s2.split()
+
+    if len(sentence1) != len(sentence2):
+        return False
+    for w1, w2 in zip(sentence1, sentence2):
+        if len(w1) != len(w2):
+            return False
+        if set(w1) & set(w2):
+            return False
+    return True

@@ -1,0 +1,9 @@
+def hexa(string):
+  result = ""
+  for ch in string:
+    hexa=hex(ord(ch))[2:]
+    if len(hexa)== 1:
+      hexa = '0'+hexa
+    result +=hexa
+  return result.strip()
+print(hexa("hello"))

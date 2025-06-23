@@ -1,0 +1,11 @@
+def print_rangoli(n):
+    import string
+    letters = string.ascii_lowercase
+    lines = []
+
+    for i in range(n):
+        part = '-'.join(letters[n-1:i:-1] + letters[i:n])
+        lines.append(part.center(4*n - 3, '-'))
+    print('\n'.join(lines[::-1] + lines[1:]))
+
+print_rangoli(3)
