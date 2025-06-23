@@ -1,0 +1,156 @@
+/* Complete the queries below to create the seven tables. */
+
+-- Creating Customers Table
+CREATE TABLE Customers (
+    CustomerID INT primary key,
+    FirstName VARCHAR(50) not null,
+    LastName VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) UNIQUE not null,
+    Phone VARCHAR(20),
+    Address VARCHAR(255),
+    City VARCHAR(50),
+    Region VARCHAR(50),
+    Country VARCHAR(50),
+    PostalCode VARCHAR(10)
+);
+
+-- Creating Products Table
+CREATE TABLE Products (
+    ProductID int  PRIMARY KEY,
+    ProductName VARCHAR(255) not null,
+    Description TEXT,
+    CategoryID INT,
+    Price DECIMAL(10, 2) NOT NULL,
+    StockQuantity INT DEFAULT 0,
+    FOREIGN KEY (CategoryID) REFERENCES Category(CategoryID)
+);
+
+-- Creating Orders Table
+CREATE TABLE Orders (
+    OrderID INT primary key,
+    CustomerID INT,
+    OrderDate DATE not null,
+    ShippingAddress VARCHAR(255),
+    OrderStatus VARCHAR(50) DEFAULT 'Pending',
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+
+-- Creating OrderDetails Table
+CREATE TABLE OrderDetails (
+    OrderDetailID INT primary key,
+    OrderID INT,
+    ProductID INT,
+    Quantity INT not null,
+    UnitPrice DECIMAL(10, 2) not null,
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (ProductID) references Products(ProductID)
+);
+
+-- Creating Payments Table
+CREATE TABLE Payments (
+    PaymentID INT primary key,
+    OrderID INT,
+    PaymentDate DATE not null,
+    Amount decimal(10, 2) NOT NULL,
+    PaymentMethod VARCHAR(50),
+    TransactionID VARCHAR(100),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+);
+
+-- Creating Shipping Table
+CREATE TABLE Shipping (
+    ShippingID INT primary key,
+    OrderID INT,
+    ShippingDate DATE,
+    TrackingNumber VARCHAR(100),
+    Shipper VARCHAR(50),
+    DeliveryDate DATE,
+    ShippingCost DECIMAL(10, 2),
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID)
+);
+
+CREATE TABLE Categories (
+    CategoryID INT primary key,
+    CategoryName VARCHAR(255) not null,
+    Description TEXT
+);
+Task-11 Find products with low stock
+===================================
+-- Write the query to identify products that are less than 16 in quantity.
+-- Make use of the `EXCEPT` clause
+-- Headers expected in output: | ProductID | ProductName |
+
+select ProductID, ProductName
+from Products 
+except
+select ProductID, ProductName
+from Products 
+where StockQuantity >= 16;
+
+Task-12 Count orders per customer
+=================================
+-- Write the query to calculate the number of orders placed by each customer.
+-- The results should be grouped by customer details and sorted in descending order of number of orders.
+-- Headers expected in output: | CustomerID | FirstName | LastName | NumberOfOrders |
+
+select c.CustomerID,c.FirstName,c.LastName,
+    count(o.OrderID) as NumberOfOrders
+from Customers c
+left join Orders o on c.CustomerID = o.CustomerID
+group by c.CustomerID, c.FirstName, c.LastName
+order by NumberOfOrders desc;
+
+Task-13 Compute monthly total revenue
+====================================
+-- Write the query to calculate the total revenue generated each month
+-- The results should be grouped and ordered by `OrderMonth`
+-- Headers expected in output: | OrderMonth | TotalRevenue |
+
+select strftime('%Y-%m', o.OrderDate) as OrderMonth,
+    sum(od.Quantity * od.UnitPrice) as TotalRevenue
+from Orders o
+join OrderDetails od on o.OrderID = od.OrderID
+group by OrderMonth
+order by OrderMonth;
+
+Task-14 Top 5 Best-Selling Products
+===================================
+    vowels = 'AEIOU'
+    kevin_score = 0
+    stuart_score = 0
+    length = len(string)
+    for i in range(length):
+        if string[i] in vowels:
+            kevin_score += length - i
+        else:
+            stuart_score += length - i
+    if kevin_score > stuart_score:
+        print(f"Kevin {kevin_score}")
+    elif stuart_score > kevin_score:
+        print(f"Stuart {stuart_score}")
+    else:
+        print("Draw")
+
+Task-17 Rank products by price in each category
+=================================================
+-- Write the query to rank products within each category based on their price.
+-- Create a temporary column called `PriceRank` 
+-- The products within each category must be ranked in descending order of price.
+-- Headers expected in output: | CategoryID |  ProductName  | Price | PriceRank |
+
+select CategoryID,ProductName,Price,
+    rank() OVER (PARTITION by CategoryID order by Price desc) as PriceRank
+from Products;
+
+Task-18 Categorize products into four price tiers
+================================================
+-- Write the query to divide products into four price groups (quartiles) within each category.
+-- Create a temporary column called `PriceQuartile` 
+-- Use the `NTILE` function
+-- Headers expected in output: | CategoryID | ProductName | Price | PriceQuartile |
+
+
+select CategoryID,ProductName,Price,
+    ntile(4) OVER (PARTITION by CategoryID order by Price desc) as PriceQuartile
+from Products;
+

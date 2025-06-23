@@ -1,0 +1,7 @@
+-- Write the query to retrieve order information along with the products included in each order.
+-- Headers expected in output: | OrderID | OrderDate  | FirstName | LastName |  ProductName   | Quantity | UnitPrice |
+SELECT o.OrderID,o.OrderDate,c.FirstName,c.LastName,p.ProductName,od.Quantity,od.UnitPrice
+FROM Orders o
+JOIN Customers c ON o.CustomerID = c.CustomerID
+JOIN OrderDetails od ON o.OrderID = od.OrderID
+JOIN Products p ON od.ProductID = p.ProductID;

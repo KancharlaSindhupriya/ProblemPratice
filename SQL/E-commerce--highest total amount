@@ -1,0 +1,17 @@
+-- Write the query to find the order with the highest total amount for each customer.
+-- Headers expected in output: | OrderID | CustomerID | OrderDate  | TotalOrderAmount |
+WITH OrderTotals as (
+    select o.OrderID,o.CustomerID,o.OrderDate,
+        sum(od.Quantity * od.UnitPrice) as TotalOrderAmount
+    from Orders o
+    join OrderDetails od ON o.OrderID = od.OrderID
+    group by o.OrderID, o.CustomerID, o.OrderDate
+),
+RankedOrders as (
+    select *,
+           rank() over (partition by CustomerID order by TotalOrderAmount desc) as rnk
+    from OrderTotals
+)
+select OrderID,CustomerID,OrderDate,TotalOrderAmount
+from RankedOrders
+where rnk = 1;

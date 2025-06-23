@@ -1,0 +1,7 @@
+-- Write the query to generate all possible combinations of discount offers for products. 
+-- Headers expected in output: |  ProductName   |  DiscountName   | DiscountPercentage | DiscountedPrice |
+
+select p.ProductName,d.DiscountName,d.DiscountPercentage,
+    round(p.Price * (1 - d.DiscountPercentage), 2) as DiscountedPrice
+from Products p
+cross join Discounts d;

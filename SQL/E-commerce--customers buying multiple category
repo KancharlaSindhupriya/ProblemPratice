@@ -1,0 +1,9 @@
+-- Write the query to find customers who have purchased products from more than one category
+-- Headers expected in output: | CustomerID |
+
+select o.CustomerID
+from Orders o
+join Products p on od.ProductID = p.ProductID
+join OrderDetails od on o.OrderID = od.OrderID
+group by o.CustomerID
+having count(p.CategoryID) > 1;
