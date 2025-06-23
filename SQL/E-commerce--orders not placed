@@ -1,0 +1,14 @@
+-- Write the query to find all customers who have not placed any orders.
+-- Headers expected in output: | CustomerID  | FirstName | LastName |
+select c.CustomerID,c.FirstName,c.LastName
+from Customers c
+left join Orders o on c.CustomerID = o.CustomerID
+where o.OrderID IS null;
+
+
+-- Write the query to find all products that have never been included in any order.
+-- Headers expected in output: | ProductID | ProductName |
+select p.ProductID,p.ProductName
+from Products p
+left join OrderDetails od on p.ProductID = od.ProductID
+where od.OrderID IS null;

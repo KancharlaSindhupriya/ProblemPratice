@@ -1,0 +1,23 @@
+/*CUSTOMER who placed an ORDER*/
+SELECT customer_id FROM Customers
+where customer_id in (SELECT customer_id FROM Orders
+);
+/*CUSTOMER who never placed an order */
+SELECT customer_id FROM Customers
+where customer_id not in (SELECT customer_id FROM orders
+);
+/*products that are ordered*/
+SELECT product_name FROM Products
+WHERE product_id IN (SELECT product_id FROM Order_Details
+);
+
+SELECT product_name FROM Products
+WHERE product_id not IN (SELECT product_id FROM Order_Details
+);
+
+/* products in the same category*/
+SELECT * FROM Products
+WHERE category_id = (
+  SELECT category_id FROM Categories WHERE product_name = 'Chai'
+);
+

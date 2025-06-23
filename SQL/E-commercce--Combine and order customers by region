@@ -1,0 +1,9 @@
+-- Write the query to retrieve a combined list of customers from different regions - USA, UK, France, along with an additional data indicating whether the customer's region has been specified (i.e., if Region is NULL, replace it with 'Not Specified'). 
+--  Sort the result by country and then by last name in ascending order."
+-- Headers expected in output: | CustomerID | FirstName | LastName |City | Region | Country |
+
+select CustomerID,FirstName,LastName,City,
+    coalesce(Region, 'Not Specified') AS Region,Country
+from Customers
+where Country IN ('USA', 'UK', 'France')
+order by Country asc,LastName asc;
